@@ -1,0 +1,21 @@
+version: '3'
+services:
+  library:
+    build:
+      context: ./library
+    container_name: library-app
+    ports:
+      - "8080:3000"  
+    volumes:
+      - ./library:/app 
+
+  counter:
+    build:
+      context: ./counter
+    container_name: counter-app
+    ports:
+      - "8081:3001"  
+    volumes:
+      - ./counter:/app  
+    depends_on:
+      - library  

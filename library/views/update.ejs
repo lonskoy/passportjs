@@ -1,0 +1,12 @@
+<%- include('./partials/layout-start.ejs', {title: 'Редактирование книги'}) %> <%- include('./partials/menu.ejs') %>
+
+<h1 class="mb-3"><%= book.title %></h1>
+
+<div class="card">
+  <div class="card-body">
+    <%- include('./partials/formBook.ejs') %> 
+  </div>
+  </div>
+</div>
+
+<%- include('./partials/layout-end.ejs') %>
