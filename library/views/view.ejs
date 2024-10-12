@@ -24,40 +24,37 @@
   <!-- Блок с чатом -->
   <div class="card-body" style="display: flex; flex-direction: column; gap: 30px;">
     <form name="chatMsg" style="display: flex; flex-direction: column; gap: 30px;">
-      <input type="text" id="msgInput" name="msg" placeholder="Введите сообщение" style="width: 500px;" />
-      <button type="button" id="sendButton" style="width: 150px;">Отправить</button>
+      <input type="text" id="userName" name="username" placeholder="Ваше имя" style="width: 250px;" />
+      <input type="text" id="userMsg" name="userMsg" placeholder="Введите сообщение" style="width: 500px;" />
+      <button type="button" id="btnSend" style="width: 150px;">Отправить</button>
     </form>
     <textarea id="textChat" name="textChat" placeholder="Чат" 
       style="width: 90%; height: 150px; resize: none;" readonly></textarea>
   </div>
 </div>
 
+
 <script>
-  const bookId = location.pathname.split('/').pop();
-  document.addEventListener('DOMContentLoaded', () => {
-    const socket = io('/', {query: `roomName=${bookId}`});  // Подключение к серверу
-    const sendButton = document.getElementById('sendButton');
-    const msgInput = document.getElementById('msgInput');
-    const textChat = document.getElementById('textChat');
-  })
+    const currentRoom = location.pathname.split('/').pop();
+    const socket = io.connect('/', { query: `roomName=${currentRoom}` });  // 
 
-    // Присоединение к комнате
-    socket.emit('joinRoom', bookId);
+    const userName = document.querySelector('#userName');
+    const userMsg = document.querySelector('#userMsg');  // 
+    const btnSend = document.querySelector('#btnSend');  // 
+    const textChat = document.querySelector('#textChat');
 
-  // Обработчик отправки сообщения по клику на кнопку
-  sendButton.addEventListener('click', () => {
-    const message = msgInput.value;
-    if (message) {
-      // Отправка сообщения на сервер в комнату
-      socket.emit('chatMessage', { room: bookId, message });
-      msgInput.value = '';  // Очистка поля после отправки
-    }
-  });
+    btnSend.addEventListener('click', () => {
+      console.log('click')
+      const msg = userMsg.value.trim();
+      if (msg) {
+        socket.emit('sendMessage', { roomName: currentRoom, message: msg });
+        userMsg.value = '';  // Очищаем поле ввода
+      }
+    });
 
-  // Получение и отображение сообщений от других участников
-  socket.on('message', (data) => {
-    textChat.value += `${data.message}\n`;
-  });
+    socket.on('message', (msg) => {
+      textChat.value += `${msg}\n`;  // Добавляем сообщение в текстовое поле
+    });
 </script>
 
 <%- include('./partials/layout-end') %>
