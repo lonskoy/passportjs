@@ -1,3 +1,4 @@
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <%- include('./partials/layout-start', { title: title }) %>
 <%- include('./partials/menu') %>
 
@@ -36,7 +37,7 @@
 
 <script>
     const currentRoom = location.pathname.split('/').pop();
-    const socket = io.connect('/', { query: `roomName=${currentRoom}` });  // 
+    const socket = io.connect('/', {query: `roomName=${currentRoom}`})
 
     const userName = document.querySelector('#userName');
     const userMsg = document.querySelector('#userMsg');  // 
